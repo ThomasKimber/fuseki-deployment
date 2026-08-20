@@ -17,6 +17,3 @@
     tdb2:location "/fuseki-base/databases/main" ;
     tdb2:unionDefaultGraph false .
 
-# Register services
-fuseki:services ( <#service_main> ) .
-
