@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  fuseki:
+    image: secoresearch/fuseki:5.4.0@sha256:<digest>  # Pin exact image
+    container_name: fuseki-prod
+    environment:
+      - FUSEKI_BASE=/fuseki-base
+      - JAVA_OPTIONS=${JAVA_OPTIONS}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ./fuseki/config.ttl:/fuseki-base/config.ttl:ro
+      - ./fuseki/log4j2.properties:/fuseki-base/log4j2.properties:ro
+      - fuseki-data:/fuseki-base/databases
+    # Production: use named volume instead of bind mount
+    # Or use NFS/EFS for shared storage
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  fuseki-data:
+    driver: local
